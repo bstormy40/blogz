@@ -20,7 +20,7 @@ class BlogHandler(webapp2.RequestHandler):
             The user parameter will be a User object.
         """
 
-        user_posts = db.GqlQuery("SELECT * FROM Post WHERE author = '%s'" % author)
+        query = Post.all().filter("author", user).order('-created')
         return query.fetch(limit=limit, offset=offset)
 
     def get_user_by_name(self, username):
