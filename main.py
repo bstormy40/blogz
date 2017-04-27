@@ -20,7 +20,7 @@ class BlogHandler(webapp2.RequestHandler):
             The user parameter will be a User object.
         """
 
-        user_posts = Post.filter(username).order('-created')
+        user_posts = db.GqlQuery("SELECT * FROM Post WHERE author = '%s'" % author)
         return query.fetch(limit=limit, offset=offset)
 
     def get_user_by_name(self, username):
@@ -263,7 +263,7 @@ class LoginHandler(BlogHandler):
     def render_login_form(self, error=""):
         """ Render the login form with or without an error, based on parameters """
         t = jinja_env.get_template("login.html")
-        response = t.render(error=error)
+        response = t.render(errors=error)
         self.response.out.write(response)
 
     def get(self):
